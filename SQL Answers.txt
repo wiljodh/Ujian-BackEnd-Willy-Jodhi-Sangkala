@@ -1,0 +1,23 @@
+1. History transfer 30 hari terakhir nasabah tertentu.
+
+SELECT * FROM history_transfer WHERE waktu_distransfer BETWEEN NOW() - INTERVAL 30 DAY AND NOW() AND id_customer = 1
+
+
+2. History Setoran tunai 30 hari terakhir nasabah tertentu.
+
+SELECT * FROM history_stortunai WHERE waktu_distor BETWEEN NOW() - INTERVAL 30 DAY AND NOW() AND id_customer = 4
+
+3. Urutan nasabah yang melakukan transfer dari paling sering ke paling jarang (tampilkan berapa kali melakukan transfernya pada setiap nasabah).
+
+SELECT nama,count(waktu_distransfer) From `customer_ditel` JOIN `history_transfer` ON customer_ditel.id = history_transfer.id_customer GROUP BY customer_ditel.nama ORDER BY history_transfer.waktu_distransfer ASC
+
+
+4. Urutan nasabah yang melakukan jumlah nominal setoran tunai dari paling banyak ke paling sedikit (tampilkan jumlah nominal setoran tunai pada setiap nasabah).
+
+SELECT nama,SUM(jumlah_stor) From `customer_ditel` JOIN `history_stortunai` ON customer_ditel.id = history_stortunai.id_customer GROUP BY customer_ditel.nama ORDER BY history_stortunai.jumlah_stor DESC
+
+
+5. History Mutasi Rekening nasabah tertentu (Gabungan Transfer dan Setoran Tunai) pada bulan Juli 2018 saja.
+
+SELECT nama,email,alamat,nomor_hp,waktu_distor,jumlah_stor,kerekening,jumlah_transfer,waktu_distransfer From `customer_ditel` JOIN `history_stortunai` ON customer_ditel.id = history_stortunai.id_customer JOIN `history_transfer` ON customer_ditel.id = history_transfer.id_customer WHERE history_stortunai.waktu_distor BETWEEN "2018-07-01" AND "2018-07-31" AND history_transfer.waktu_distransfer BETWEEN "2018-07-01" AND "2018-07-31"
+
